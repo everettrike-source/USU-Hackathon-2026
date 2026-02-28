@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { calculateBaseCalories, bulkCutCalories, type UserInformation } from './utils/NutritionCalculator'
 
 import './App.css'
 
@@ -14,22 +15,65 @@ function App() {
   const [target, setTarget] = useState<string>("")
   const [months, setMonths] = useState<string>("")
   const [BMR, setBMR] = useState<number>(0)
+  const [age, setAge] = useState<string>("")
+  const [calorieResult, setCalorieResult] = useState<number>(0)
+  
   const handleCalculate = () => 
   {
     const hFeet = Number(feet)
     const hInches = Number(inches)
     const w = Number(weight)
     const act = Number(activity)
+    const userAge = Number(age)
 
-    if (!hFeet || !hInches || !w || !gender || !act) {
+    if (!hFeet || !hInches || !w || !gender || !act || !userAge) {
       alert("Please fill out all fields correctly")
       setShow(0)
       return
     }
     
-    const result = 0
-    setBMR(result)
+    const user: UserInformation = {
+      age: userAge,
+      weight: w,
+      gender: gender as 'male' | 'female',
+      activityLevel: act,
+      heightFoot: hFeet,
+      heightInches: hInches
+    }
+    
+    const bmrResult = calculateBaseCalories(user)
+    setBMR(bmrResult)
     setShow(show + 1)
+  }
+
+  const handleBulkCutCalculate = () => {
+    const hFeet = Number(feet)
+    const hInches = Number(inches)
+    const w = Number(weight)
+    const act = Number(activity)
+    const userAge = Number(age)
+    const goalWeight = Number(target)
+    const monthsToTarget = Number(months)
+
+    if (!goalWeight || !monthsToTarget) {
+      alert("Please fill out all fields")
+      return
+    }
+
+    const user: UserInformation = {
+      age: userAge,
+      weight: w,
+      gender: gender as 'male' | 'female',
+      activityLevel: act,
+      heightFoot: hFeet,
+      heightInches: hInches,
+      targetWeight: goalWeight,
+      targetDate: monthsToTarget * 30.5,
+      bmr: BMR
+    }
+
+    const result = bulkCutCalories(user)
+    setCalorieResult(result)
   }
 
   return (
@@ -79,6 +123,23 @@ function App() {
         <div className = "banner">BMR Calculator</div>
         <div className = "content">
           <div className = "input-box">
+            <h2>Enter Age</h2>
+            <input
+              type="number"
+              placeholder="age (years)"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+            />
+            <button onClick = {() => setShow(show + 1)}>Next</button>
+          </div>
+        </div>
+      </>
+      }
+      {show==3 &&
+      <>
+        <div className = "banner">BMR Calculator</div>
+        <div className = "content">
+          <div className = "input-box">
             <h2>Enter Gender</h2>
             <select
               value={gender}
@@ -93,7 +154,7 @@ function App() {
         </div>
       </>
       }
-      {show==3 &&
+      {show==4 &&
       <>
         <div className = "banner">BMR Calculator</div>
         <div className = "content">
@@ -110,7 +171,7 @@ function App() {
         </div>
       </>
       }
-      {show == 4 &&
+      {show == 5 &&
       <>
         <div className = "banner">Goal Weight Calories Calculator</div>
         <div className = "content">
@@ -129,7 +190,17 @@ function App() {
               value = {months}
               onChange={(e) => setMonths(e.target.value)}
             />
-            
+            <button onClick={handleBulkCutCalculate}>Calculate Daily Calories</button>
+          </div>
+        </div>
+      </>
+      }
+      {show == 6 &&
+      <>
+        <div className = "banner">Your Daily Calories</div>
+        <div className = "content">
+          <div className = "input-box">
+            <h2>Your daily calorie goal is: {calorieResult}</h2>
           </div>
         </div>
       </>
