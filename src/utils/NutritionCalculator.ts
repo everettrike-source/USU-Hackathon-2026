@@ -5,25 +5,40 @@ export type UserInformation = {
     activityLevel: number;
     heightFoot: number;
     heightInches: number;
-    
 }
 
-export function calculateBaseCalories(user: UserInformation): number{
-    const weightkg = user.weight * 0.453592; // Convert pounds to kg
-    const realHeight = user.heightFoot * 12 + user.heightInches;
+export type ExtraInformation = {
+    targetWeight: number;
+    targetDate: number;
+    bmr: number;
+}
+
+export function calculateBaseCalories(user: UserInformation): number {
+    const weightkg = user.weight / 2.20462; 
+    const heightCm = (user.heightFoot * 12 + user.heightInches) * 2.54;
+    const exerciseMin = user.activityLevel * 60/ 7
     let BMR = 0;
-    if(user.gender === 'male'){
-        BMR = 88.362 + (13.397 * weightkg) + (4.799 * realHeight) - (5.677 * user.age);
-    }
-    else{
-        BMR = 44.593 + (9.247 * weightkg) + (3.098 * realHeight) - (4.330 * user.age);
+    
+    // Modern Mifflin-St Jeor Equation
+    if (user.gender === 'male') {
+        BMR = (10 * weightkg) + (6.25 * heightCm) - (5 * user.age) + 5;
+    } else {
+        BMR = (10 * weightkg) + (6.25 * heightCm) - (5 * user.age) - 161;
     }
 
-    BMR += user.activityLevel* (5.0 * 3.5 * weightkg)/200;
-
-    return BMR;
+     BMR *= 1.2;
+     BMR += exerciseMin * (5.0 * 3.5 * weightkg) / 200;
+    user.bmr = BMR;
+    return Math.round(BMR);
 }
-
-const Everett: UserInformation = {age:18,weight: 160, gender:'male',activityLevel:900,heightFoot:6,heightInches:1};
+//if under or over max or min alert them saying by that date that this is max/min weight healthly possible to reach.
+export function bulkCutCalories(user: UserInformation): number {
+    const baseCalories = user.bmr;
+    const weightDifference = user.targetWeight - user.weight;
+    const daysToTarget = user.targetDate;  
+   
+    return Math.round(baseCalories + surplus);
+}
+const Everett: UserInformation = {age:18,weight: 160, gender:'male',activityLevel: 14,heightFoot:6,heightInches:1};
 const myCalories = calculateBaseCalories(Everett);
 console.log(myCalories);
