@@ -1,33 +1,55 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [feet, setFeet] = useState<string>("")
+  const [inches, setInches] = useState<string>("")
+  const [weight, setWeight] = useState<string>("")
+  const [gender, setGender] = useState<string>("")
+  const [activity, setActivity] = useState<string>("")
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className = "banner">BMR Calculator</div>
+      <div className = "content">
+        <div className = "input-box">
+          <h2>Please enter your information below to calculate your BMR</h2>
+          <input
+            type="number"
+            placeholder="feet"
+            value={feet}
+            onChange={(e) => setFeet(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="inches"
+            value={inches}
+            onChange={(e) => setInches(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="weight (lbs)"
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+          />
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+          <input
+            type="number"
+            placeholder="# of hours active per week"
+            value={activity}
+            onChange={(e) => setActivity(e.target.value)}
+          />
+          <button>Calculate BMR and target calories</button>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
