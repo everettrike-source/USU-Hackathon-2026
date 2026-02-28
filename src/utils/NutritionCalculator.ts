@@ -1,3 +1,5 @@
+let bmr = 0;
+
 export type UserInformation = {
     age:number; 
     weight: number; 
@@ -12,6 +14,8 @@ export type ExtraInformation = {
     targetWeight: number;
     targetMonth: number;
 }
+
+
 
 export function calculateBaseCalories(user: UserInformation): number {
     const weightkg = user.weight / 2.20462; 
