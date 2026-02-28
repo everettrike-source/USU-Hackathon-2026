@@ -5,7 +5,7 @@ import {type MealPlan, generateMealPlan, mealPlanToString} from './utils/MealPla
 const PageTemplate = ({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) => (
     <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4 animate-in fade-in zoom-in-95 duration-300">
       <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
-        <div className="mt-6 mx-6 flex-col text-center max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+        <div className="mt-6 mx-auto flex-col text-center max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
           <div>
             <div className="text-xl font-medium text-black dark:text-white">{title}</div>
             {subtitle && <p className="text-gray-500 dark:text-gray-400">{subtitle}</p>}
@@ -71,6 +71,7 @@ function App() {
   const [calorieResult, setCalorieResult] = useState<number>(0)
   const [restrictions, setRestrictions] = useState<string>("")
   const [meals, setMeals] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleCalculate = () =>
   {
@@ -138,6 +139,8 @@ function App() {
   }
 
   const handleMealPlans = async () => {
+    setShow(99);
+    setIsLoading(true);
     try
     {
       const plan = await generateMealPlan(calorieResult, restrictions)
@@ -145,12 +148,16 @@ function App() {
       const planString = mealPlanToString(plan)
 
       setMeals(planString)
-      setShow(prev => prev+1)
+      setShow(8);
     }
     catch (error: any) {
     // Using \n adds a line break in the alert box to make it readable
     alert(`Error Generating Plan:\n\n${error.message}`);
+    setShow(7);
     }
+    finally {
+    setIsLoading(false); // Turn loading OFF
+  }
   }
 
   
@@ -273,25 +280,77 @@ function App() {
       {show === 8 && (
         <PageTemplate title="Meal Plan Generator" subtitle="Tell us your dietary needs!">
           <div className="space-y-5">
-            <InputField label="Restrictions" type="text" placeholder="e.g. Gluten-free, Vegan" value={restrictions} onChange={(e) => setRestrictions(e.target.value)} />
+            <InputField 
+              label="Restrictions" 
+              type="text" 
+              placeholder="e.g. Gluten-free, Vegan" 
+              value={restrictions} 
+              onChange={(e) => setRestrictions(e.target.value)} 
+            />
+            
+            <p className="text-zinc-500 text-xs px-1">
+              Tip: You can include multiple restrictions or specific foods you dislike.
+            </p>
           </div>
-          <ActionButton onClick={handleMealPlans}>Generate</ActionButton>
+
+          <ActionButton onClick={handleMealPlans}>
+            Generate
+          </ActionButton>
         </PageTemplate>
       )}
+      {show === 99 && (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
+    <div className="flex flex-col items-center space-y-6">
+      {/* THE SPINNER */}
+      <div className="w-16 h-16 border-4 border-zinc-800 border-t-red-600 rounded-full animate-spin"></div>
+      
+      <div className="text-center">
+        <h2 className="text-white text-2xl font-bold tracking-tight">Generating Recipes</h2>
+        <p className="text-zinc-500 mt-2">Consulting with the AI chef...</p>
+      </div>
+    </div>
+  </div>
+)}
 
       {show === 9 && (
         <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
           <div className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
             <div className="mt-6 mx-6 flex-col text-center max-w-full items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
               <div>
-                <div className="text-xl font-medium text-black dark:text-white">Your Meal Plan</div>
-                <p className="text-gray-500 dark:text-gray-400">Here's your personalized plan!</p>
+                <div className="text-xl font-medium text-black dark:text-white">Single Day Meal Plan</div>
+                <p className="text-gray-500 dark:text-gray-400">Your personalized meal plan is ready. Review the meals below and save the days you like, or regenerate for new options. Once you've built your perfect plan, generate your master grocery list with one click.</p>
               </div>
             </div>
             <div className="p-8">
               <pre className="text-white text-sm whitespace-pre-wrap font-mono bg-zinc-950 p-6 rounded-xl border border-zinc-700 max-h-96 overflow-y-auto">
                 {meals}
               </pre>
+              <div className="mt-6 space-y-4">
+                
+                {/* Top Row: Accept and Decline */}
+                <div className="flex gap-4">
+                  <button 
+                    onClick={() => console.log("Accepted!")}
+                    className="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-900/20 active:scale-95 flex items-center justify-center gap-2"
+                  >
+                     Accept Day
+                  </button>
+                  <button 
+                    onClick={() => console.log("Declined!")}
+                    className="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-red-900/20 active:scale-95 flex items-center justify-center gap-2"
+                  >
+                     Decline & Retry
+                  </button>
+                </div>
+
+                {/* Bottom Row: Generate List */}
+                <button 
+                  onClick={() => console.log("Generate List!")}
+                  className="w-full bg-zinc-100 hover:bg-white text-zinc-900 text-lg font-extrabold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 transition-all active:scale-95 flex justify-center items-center gap-2"
+                >
+                  Generate Shopping List
+                </button>
+              </div>
             </div>
           </div>
         </div>

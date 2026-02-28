@@ -1,1 +1,19 @@
 @import "tailwindcss";
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Optional: Add a "glow" effect to the red part of the spinner */
+.border-t-red-600 {
+  border-top-color: #dc2626; /* Tailwind's red-600 */
+  filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.4));
+}
