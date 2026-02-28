@@ -1,3 +1,5 @@
+let bmr = 0;
+
 export type UserInformation = {
     age:number; 
     weight: number; 
@@ -9,9 +11,10 @@ export type UserInformation = {
 
 export type ExtraInformation = {
     targetWeight: number;
-    targetDate: number;
-    bmr: number;
+    targetMonth: number;
 }
+
+
 
 export function calculateBaseCalories(user: UserInformation): number {
     const weightkg = user.weight / 2.20462; 
@@ -28,17 +31,17 @@ export function calculateBaseCalories(user: UserInformation): number {
 
      BMR *= 1.2;
      BMR += exerciseMin * (5.0 * 3.5 * weightkg) / 200;
-    user.bmr = BMR;
+     bmr = BMR;
     return Math.round(BMR);
 }
 //if under or over max or min alert them saying by that date that this is max/min weight healthly possible to reach.
-export function bulkCutCalories(user: UserInformation): number {
-    const baseCalories = user.bmr;
-    const weightDifference = user.targetWeight - user.weight;
-    const daysToTarget = user.targetDate;  
+export function bulkCutCalories(user: UserInformation, extra: ExtraInformation): number {
+    const baseCalories = bmr;
+    const weightDifference = extra.targetWeight - user.weight;
+    const daysToTarget = 30.5 * extra.targetMonth;  
+    const totalCalorieShift = weightDifference * 3500;
+    const dailyCalorieShift = totalCalorieShift / daysToTarget;
+
    
     return Math.round(baseCalories + surplus);
 }
-const Everett: UserInformation = {age:18,weight: 160, gender:'male',activityLevel: 14,heightFoot:6,heightInches:1};
-const myCalories = calculateBaseCalories(Everett);
-console.log(myCalories);
