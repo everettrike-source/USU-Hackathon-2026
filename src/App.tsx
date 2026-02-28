@@ -5,58 +5,70 @@ import { ShoppingListManager } from './utils/MealsTooIngredientsList'
 import { findGroceryStores, type GrocerySearchResult } from './utils/GroceryStoreLocator'
 
 const PageTemplate = ({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) => (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4 animate-in fade-in zoom-in-95 duration-300">
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
-        <div className="mt-6 mx-auto flex-col text-center max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-          <div>
-            <div className="text-xl font-medium text-black dark:text-white">{title}</div>
-            {subtitle && <p className="text-gray-500 dark:text-gray-400">{subtitle}</p>}
-          </div>
-        </div>
-        <div className="p-8 space-y-6">
-          {children}
+  <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4 animate-in fade-in zoom-in-95 duration-300">
+    <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
+      <div className="mt-6 mx-6 flex-col text-center max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+        <div>
+          <div className="text-xl font-medium text-black dark:text-white">{title}</div>
+          {subtitle && <p className="text-gray-500 dark:text-gray-400">{subtitle}</p>}
         </div>
       </div>
-    </div>
-  )
-
-  const InputField = ({ label, type = "text", placeholder, value, onChange, unit }: { label: string; type?: string; placeholder: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; unit?: string }) => (
-    <div>
-      <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">{label}</label>
-      <div className="relative">
-        <input
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          className="w-full bg-zinc-950 text-white text-lg px-4 py-3.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 outline-none transition-all placeholder:text-zinc-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-        />
-        {unit && <span className="absolute right-4 top-4 text-zinc-600 font-bold">{unit}</span>}
+      <div className="p-8 space-y-6">
+        {children}
       </div>
     </div>
-  )
+  </div>
+)
 
-  const SelectField = ({ label, value, onChange, options }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void; options: { value: string; label: string }[] }) => (
-    <div>
-      <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">{label}</label>
-      <select
+const InputField = ({ label, type = "text", placeholder, value, onChange, unit }: { label: string; type?: string; placeholder: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; unit?: string }) => (
+  <div>
+    <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">{label}</label>
+    <div className="relative">
+      <input
+        type={type}
+        placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-full bg-zinc-950 text-white text-lg px-4 py-3.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 outline-none transition-all"
-      >
-        {options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-      </select>
+        className="w-full bg-zinc-950 text-white text-lg px-4 py-3.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 outline-none transition-all placeholder:text-zinc-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none[&::-webkit-inner-spin-button]:appearance-none"
+      />
+      {unit && <span className="absolute right-4 top-4 text-zinc-600 font-bold">{unit}</span>}
     </div>
-  )
+  </div>
+)
 
-  const ActionButton = ({ onClick, children }: { onClick: () => void; children: React.ReactNode }) => (
-    <button 
-      onClick={onClick} 
-      className="w-full mt-4 bg-white text-zinc-900 text-lg font-extrabold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 transition-all active:scale-95 flex justify-center items-center gap-2"
+const SelectField = ({ label, value, onChange, options }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void; options: { value: string; label: string }[] }) => (
+  <div>
+    <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">{label}</label>
+    <select
+      value={value}
+      onChange={onChange}
+      className="w-full bg-zinc-950 text-white text-lg px-4 py-3.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 outline-none transition-all"
     >
-      {children} <span className="text-xl">➔</span>
-    </button>
-  )
+      {options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+    </select>
+  </div>
+)
+
+const ActionButton = ({ onClick, children }: { onClick: () => void; children: React.ReactNode }) => (
+  <button 
+    onClick={onClick} 
+    className="w-full mt-4 bg-white text-zinc-900 text-lg font-extrabold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 transition-all active:scale-95 flex justify-center items-center gap-2"
+  >
+    {children} <span className="text-xl">➔</span>
+  </button>
+)
+
+const LoadingScreen = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950">
+    <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden p-12 text-center">
+      <div className="flex justify-center mb-6">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-zinc-700 border-t-red-500"></div>
+      </div>
+      <p className="text-white text-lg font-semibold">Generating your meal plan...</p>
+      <p className="text-zinc-400 text-sm mt-2">This may take a moment</p>
+    </div>
+  </div>
+)
 
 function App() {
   const [feet, setFeet] = useState<string>("")
@@ -146,8 +158,7 @@ function App() {
   }
 
   const handleMealPlans = async () => {
-    setShow(99);
-    setIsLoading(true);
+    setIsLoading(true)
     try
     {
       const plan = await generateMealPlan(calorieResult, restrictions)
@@ -164,7 +175,7 @@ function App() {
     setShow(7);
     }
     finally {
-    setIsLoading(false); // Turn loading OFF
+    setIsLoading(false);
   }
   }
 
@@ -180,6 +191,7 @@ function App() {
   }
 
   const generateNewMealPlan = async () => {
+    setIsLoading(true)
     try {
       const plan = await generateMealPlan(calorieResult, restrictions)
       const planString = mealPlanToString(plan)
@@ -187,6 +199,8 @@ function App() {
       setCurrentMealPlan(plan)
     } catch (error: any) {
       alert(`Error Generating Plan:\n\n${error.message}`)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -219,58 +233,10 @@ function App() {
     }
   }
 
-  const handleAcceptMeal = async () => {
-    if (currentMealPlan) {
-      shoppingManager.addDayToPlan(currentMealPlan)
-    }
-    await generateNewMealPlan()
+  // Show loading screen if loading
+  if (isLoading) {
+    return <LoadingScreen />
   }
-
-  const handleDeclineMeal = async () => {
-    await generateNewMealPlan()
-  }
-
-  const generateNewMealPlan = async () => {
-    try {
-      const plan = await generateMealPlan(calorieResult, restrictions)
-      const planString = mealPlanToString(plan)
-      setMeals(planString)
-      setCurrentMealPlan(plan)
-    } catch (error: any) {
-      alert(`Error Generating Plan:\n\n${error.message}`)
-    }
-  }
-
-  const handleGenerateShoppingList = async () => {
-    if (!userLocation.trim()) {
-      alert("Please enter your location")
-      return
-    }
-
-    try {
-      setIsLoadingGroceries(true)
-      const ingredients = shoppingManager.generateFinalShoppingList()
-      
-      // Parse ingredients string to Ingredient array
-      const parsedIngredients = ingredients.map(ing => {
-        const parts = ing.split(' ')
-        const quantity = parseInt(parts[0].replace('x', '')) || 1
-        const unit = parts[1] || 'item'
-        const name = parts.slice(parts[0].match(/\d/) ? 2 : 1).join(' ')
-        return { name, quantity, unit }
-      })
-
-      const result = await findGroceryStores(userLocation, parsedIngredients)
-      setGroceryResults(result)
-      setShow(10)
-    } catch (error: any) {
-      alert(`Error generating shopping list:\n\n${error.message}`)
-    } finally {
-      setIsLoadingGroceries(false)
-    }
-  }
-
-  
 
   return (
     <>
@@ -304,6 +270,7 @@ function App() {
           </div>
         </>
       )}
+
       {show === 1 && (
         <PageTemplate title="BMR Calculator" subtitle="Enter your height!">
           <div className="space-y-5">
@@ -383,13 +350,7 @@ function App() {
               <p className="text-zinc-400 text-sm mt-2">calories per day</p>
             </div>
           </div>
-          <ActionButton onClick={() => setShow(prev => prev + 1)}>Generate Meals</ActionButton>
-        </PageTemplate>
-      )}
-
-      {show === 8 && (
-        <PageTemplate title="Meal Plan Generator" subtitle="Tell us your dietary needs!">
-          <div className="space-y-5">
+          <div className="space-y-5 mt-6">
             <InputField 
               label="Restrictions" 
               type="text" 
@@ -397,33 +358,13 @@ function App() {
               value={restrictions} 
               onChange={(e) => setRestrictions(e.target.value)} 
             />
-            
-            <p className="text-zinc-500 text-xs px-1">
-              Tip: You can include multiple restrictions or specific foods you dislike.
-            </p>
           </div>
-
-          <ActionButton onClick={handleMealPlans}>
-            Generate
-          </ActionButton>
+          <ActionButton onClick={handleMealPlans}>Generate Meals</ActionButton>
         </PageTemplate>
       )}
-      {show === 99 && (
-  <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
-    <div className="flex flex-col items-center space-y-6">
-      {/* THE SPINNER */}
-      <div className="w-16 h-16 border-4 border-zinc-800 border-t-red-600 rounded-full animate-spin"></div>
-      
-      <div className="text-center">
-        <h2 className="text-white text-2xl font-bold tracking-tight">Generating Recipes</h2>
-        <p className="text-zinc-500 mt-2">Consulting with the AI chef...</p>
-      </div>
-    </div>
-  </div>
-)}
 
-      {show === 9 && (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
+      {show === 8 && (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4 animate-in fade-in zoom-in-95 duration-300">
           <div className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
             <div className="mt-6 mx-6 flex-col text-center max-w-full items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
               <div>
@@ -443,90 +384,90 @@ function App() {
                     onClick={handleAcceptMeal}
                     className="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-900/20 active:scale-95 flex items-center justify-center gap-2"
                   >
-                     Accept Day
-                  </button>
-                  <button 
+                      Accept Day
+                   </button>
+                   <button 
                     onClick={handleDeclineMeal}
                     className="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-red-900/20 active:scale-95 flex items-center justify-center gap-2"
-                  >
-                     Decline & Retry
-                  </button>
-                </div>
+                   >
+                      Decline & Retry
+                   </button>
+                 </div>
 
-                {/* Bottom Row: Generate List */}
-                <button 
-                  onClick={() => setShow(9)}
-                  className="w-full bg-zinc-100 hover:bg-white text-zinc-900 text-lg font-extrabold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 transition-all active:scale-95 flex justify-center items-center gap-2"
-                >
-                  Generate Shopping List
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+                 {/* Bottom Row: Generate List */}
+                 <button 
+                   onClick={() => setShow(9)}
+                   className="w-full bg-zinc-100 hover:bg-white text-zinc-900 text-lg font-extrabold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 transition-all active:scale-95 flex justify-center items-center gap-2"
+                 >
+                   Generate Shopping List
+                 </button>
+               </div>
+             </div>
+           </div>
+         </div>
+       )}
 
-      {show === 9 && (
-        <PageTemplate title="Shopping List" subtitle="Where should we shop?">
-          <div className="space-y-5">
-            <div className="bg-zinc-800 p-4 rounded-xl text-center">
-              <p className="text-zinc-400 text-sm">Meals Accepted</p>
-              <p className="text-3xl font-bold text-white mt-1">{shoppingManager.getPlanCount()}</p>
-            </div>
-            <InputField 
-              label="Location" 
-              type="text" 
-              placeholder="e.g. Salt Lake City, UT" 
-              value={userLocation} 
-              onChange={(e) => setUserLocation(e.target.value)} 
-            />
-          </div>
-          <button 
-            onClick={handleGenerateShoppingList}
-            disabled={isLoadingGroceries}
-            className="w-full mt-4 bg-white text-zinc-900 text-lg font-extrabold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 transition-all active:scale-95 flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoadingGroceries ? 'Loading...' : 'Find Stores'} <span className="text-xl">🛒</span>
-          </button>
-        </PageTemplate>
-      )}
+       {show === 9 && (
+         <PageTemplate title="Shopping List" subtitle="Where should we shop?">
+           <div className="space-y-5">
+             <div className="bg-zinc-800 p-4 rounded-xl text-center">
+               <p className="text-zinc-400 text-sm">Meals Accepted</p>
+               <p className="text-3xl font-bold text-white mt-1">{shoppingManager.getPlanCount()}</p>
+             </div>
+             <InputField 
+               label="Location" 
+               type="text" 
+               placeholder="e.g. Salt Lake City, UT" 
+               value={userLocation} 
+               onChange={(e) => setUserLocation(e.target.value)} 
+             />
+           </div>
+           <button 
+             onClick={handleGenerateShoppingList}
+             disabled={isLoadingGroceries}
+             className="w-full mt-4 bg-white text-zinc-900 text-lg font-extrabold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 transition-all active:scale-95 flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+           >
+             {isLoadingGroceries ? 'Loading...' : 'Find Stores'} <span className="text-xl">🛒</span>
+           </button>
+         </PageTemplate>
+       )}
 
-      {show === 10 && groceryResults && (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
-          <div className="w-full max-w-4xl bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
-            <div className="mt-6 mx-6 flex-col text-center max-w-full items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-              <div>
-                <div className="text-xl font-medium text-black dark:text-white">Grocery Stores Near You</div>
-                <p className="text-gray-500 dark:text-gray-400">Best prices for your ingredients</p>
-              </div>
-            </div>
-            <div className="p-8 space-y-6 max-h-[500px] overflow-y-auto">
-              {groceryResults.stores.map((store, idx) => (
-                <div key={idx} className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-xl font-bold text-white">{store.name}</h3>
-                      <p className="text-zinc-400 text-sm">{store.location}</p>
-                      <p className="text-zinc-500 text-xs mt-1">{store.distance.toFixed(1)} miles away</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-3xl font-bold text-green-500">${store.totalPrice.toFixed(2)}</p>
-                      {!store.hasAllIngredients && <p className="text-xs text-red-400 mt-1">Missing items</p>}
-                    </div>
-                  </div>
-                  <div className="text-xs text-zinc-400 space-y-1">
-                    {store.priceBreakdown.slice(0, 3).map((item, i) => (
-                      <p key={i}>{item.quantity} {item.unit} {item.ingredient} - ${item.price.toFixed(2)}</p>
-                    ))}
-                    {store.priceBreakdown.length > 3 && <p className="text-zinc-500">+{store.priceBreakdown.length - 3} more items</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  )
-}
-export default App
+       {show === 10 && groceryResults && (
+         <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
+           <div className="w-full max-w-4xl bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
+             <div className="mt-6 mx-6 flex-col text-center max-w-full items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+               <div>
+                 <div className="text-xl font-medium text-black dark:text-white">Grocery Stores Near You</div>
+                 <p className="text-gray-500 dark:text-gray-400">Best prices for your ingredients</p>
+               </div>
+             </div>
+             <div className="p-8 space-y-6 max-h-[500px] overflow-y-auto">
+               {groceryResults.stores.map((store, idx) => (
+                 <div key={idx} className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
+                   <div className="flex justify-between items-start mb-4">
+                     <div>
+                       <h3 className="text-xl font-bold text-white">{store.name}</h3>
+                       <p className="text-zinc-400 text-sm">{store.location}</p>
+                       <p className="text-zinc-500 text-xs mt-1">{store.distance.toFixed(1)} miles away</p>
+                     </div>
+                     <div className="text-right">
+                       <p className="text-3xl font-bold text-green-500">${store.totalPrice.toFixed(2)}</p>
+                       {!store.hasAllIngredients && <p className="text-xs text-red-400 mt-1">Missing items</p>}
+                     </div>
+                   </div>
+                   <div className="text-xs text-zinc-400 space-y-1">
+                     {store.priceBreakdown.slice(0, 3).map((item, i) => (
+                       <p key={i}>{item.quantity} {item.unit} {item.ingredient} - ${item.price.toFixed(2)}</p>
+                     ))}
+                     {store.priceBreakdown.length > 3 && <p className="text-zinc-500">+{store.priceBreakdown.length - 3} more items</p>}
+                   </div>
+                 </div>
+               ))}
+             </div>
+           </div>
+         </div>
+       )}
+     </>
+   )
+ }
+ export default App
