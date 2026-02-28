@@ -101,11 +101,10 @@ function App() {
     const userAge = Number(age)
     const intense = Number(intensity)
 
-    if (!hFeet || !hInches || !w || !gender || !act || !userAge || !intense) {
-      alert("Please fill out all fields correctly")
-      setShow(1)
-      return
-    }
+  if (feet === "" || weight === "" || gender === "" || activity === "" || age === "" || intensity === "") {
+    alert("Please fill out all fields correctly")
+    return
+  }
 
     const user: UserInformation = {
       age: userAge,
@@ -119,7 +118,7 @@ function App() {
 
     const bmrResult = calculateBaseCalories(user)
     setBMR(bmrResult)
-    setShow(prev => prev+1)
+    setShow(6)
   }
 
   const handleBulkCutCalculate = () => {
