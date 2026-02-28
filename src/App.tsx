@@ -101,31 +101,67 @@ function App() {
 
   return (
     <>
-      {show==0 &&
-      <>
-        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">BMR Calculator</div>
-        <div className="flex justify-center p-4">
-          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
-            <h2 className="mb-4 text-white text-lg font-semibold">Enter Height</h2>
-            <input
-              type="number"
-              placeholder="feet"
-              value={feet}
-              onChange={(e) => setFeet(e.target.value)}
-              className="w-full mb-4 p-3 rounded border-none"
-            />
-            <input
-              type="number"
-              placeholder="inches"
-              value={inches}
-              onChange={(e) => setInches(e.target.value)}
-              className="w-full mb-4 p-3 rounded border-none"
-            />
-            <button onClick={() => setShow(prev => prev+1)} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Next</button>
+      {show === 0 && (
+        <div className="flex flex-col items-center justify-center min-h-[70vh] p-4 animate-in fade-in zoom-in-95 duration-300">
+          
+          {/* The Main Card Container */}
+          <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
+            
+            {/* Sleek Gradient Header */}
+            <div className="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+              <img className="size-12 shrink-0" src="/vite.svg" alt="ChitChat Logo" />
+            <div>
+            <div className="text-xl font-medium text-black dark:text-white">BMR Calculator</div>
+              <p className="text-gray-500 dark:text-gray-400">Enter your height!</p>
+            </div>
+            </div>
+            {/* Input Form Area */}
+            <div className="p-8 space-y-6">
+              
+              <div className="space-y-5">
+                {/* Feet Input Group */}
+                <div>
+                  <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Feet</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      placeholder="e.g. 5"
+                      value={feet}
+                      onChange={(e) => setFeet(e.target.value)}
+                      className="w-full bg-zinc-950 text-white text-lg px-4 py-3.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 outline-none transition-all placeholder:text-zinc-600"
+                    />
+                    <span className="absolute right-4 top-4 text-zinc-600 font-bold">ft</span>
+                  </div>
+                </div>
+
+                {/* Inches Input Group */}
+                <div>
+                  <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Inches</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      placeholder="e.g. 10"
+                      value={inches}
+                      onChange={(e) => setInches(e.target.value)}
+                      className="w-full bg-zinc-950 text-white text-lg px-4 py-3.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 outline-none transition-all placeholder:text-zinc-600"
+                    />
+                    <span className="absolute right-4 top-4 text-zinc-600 font-bold">in</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* High-Converting Action Button */}
+              <button 
+                onClick={() => setShow(prev => prev + 1)} 
+                className="w-full mt-4 bg-white text-zinc-900 text-lg font-extrabold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 transition-all active:scale-95 flex justify-center items-center gap-2"
+              >
+                Continue <span className="text-xl">➔</span>
+              </button>
+              
+            </div>
           </div>
         </div>
-      </>
-      }
+      )}
       {show==1 &&
       <>
         <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">BMR Calculator</div>
