@@ -29,8 +29,8 @@ const InputField = ({ label, type = "text", placeholder, value, onChange, unit }
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-full bg-zinc-950 text-white text-lg px-4 py-3.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 outline-none transition-all placeholder:text-zinc-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none[&::-webkit-inner-spin-button]:appearance-none"
-      />
+        className="w-full bg-zinc-950 text-white text-lg px-4 py-3.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50 outline-none transition-all placeholder:text-zinc-600 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-12"
+      />      
       {unit && <span className="absolute right-4 top-4 text-zinc-600 font-bold">{unit}</span>}
     </div>
   </div>
@@ -317,15 +317,35 @@ function App() {
         </PageTemplate>
       )}
 
-      {show === 5 && (
-        <PageTemplate title="BMR Calculator" subtitle="Enter your activity level!">
-          <div className="space-y-5">
-            <InputField label="Activity Level" type="number" placeholder="e.g. 14" value={activity} onChange={(e) => setActivity(e.target.value)} unit="hrs/wk" />
-            <InputField label="Intensity" type="number" placeholder="e.g. 5" value={intensity} onChange={(e) => setIntensity(e.target.value)} unit="2-10" />
-          </div>
-          <ActionButton onClick={handleCalculate}>Calculate</ActionButton>
-        </PageTemplate>
-      )}
+     {show === 5 && (
+  <PageTemplate title="BMR Calculator" subtitle="Enter your activity level!">
+    <div className="space-y-5">
+      <InputField 
+        label="Activity Level" 
+        type="number" 
+        placeholder="e.g. 14" 
+        value={activity} 
+        onChange={(e) => setActivity(e.target.value)} 
+        unit="hrs/wk" 
+      />
+      
+      <SelectField 
+        label="Exercise Intensity" 
+        value={intensity} 
+        onChange={(e) => setIntensity(e.target.value)} 
+        options={[
+          { value: "", label: "Select Intensity" },
+          { value: "1.2", label: "Sedentary (Office work, no exercise)" },
+          { value: "3.0", label: "Low (Yoga, light stretching)" },
+          { value: "5.0", label: "Moderate (Brisk walking, cycling)" },
+          { value: "8.0", label: "Vigorous (Running, weightlifting)" },
+          { value: "12.0", label: "Extreme (Sprinting, HIIT)" }
+        ]}
+      />
+    </div>
+    <ActionButton onClick={handleCalculate}>Calculate</ActionButton>
+  </PageTemplate>
+)}
 
       {show === 6 && (
         <PageTemplate title="BMR Calculator" subtitle="Set your goal!">
@@ -335,7 +355,7 @@ function App() {
               <p className="text-3xl font-bold text-white mt-1">{BMR}</p>
             </div>
             <InputField label="Goal Weight" type="number" placeholder="e.g. 150" value={target} onChange={(e) => setTarget(e.target.value)} unit="lbs" />
-            <InputField label="Timeline" type="number" placeholder="e.g. 3" value={months} onChange={(e) => setMonths(e.target.value)} unit="mos" />
+            <InputField label="Timeline" type="number" placeholder="e.g. 3" value={months} onChange={(e) => setMonths(e.target.value)} unit="months" />
           </div>
           <ActionButton onClick={handleBulkCutCalculate}>Calculate</ActionButton>
         </PageTemplate>
