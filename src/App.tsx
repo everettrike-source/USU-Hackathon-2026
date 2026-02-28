@@ -81,6 +81,7 @@ function App() {
     }
 
     const result = bulkCutCalories(user, extra)
+    setShow(show + 1)
     setCalorieResult(result)
   }
 
