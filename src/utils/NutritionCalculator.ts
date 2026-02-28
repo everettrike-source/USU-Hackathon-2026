@@ -1,5 +1,3 @@
-let bmr = 0;
-
 export type UserInformation = {
     age:number; 
     weight: number; 
@@ -31,7 +29,7 @@ export function calculateBaseCalories(user: UserInformation): number {
     }
 
      BMR *= 1.2;
-     if(exerciseMin > 0){
+     if(exerciseMin > 0 && user.activityIntensity > 1.2) {
      BMR += (user.activityIntensity * 3.5 * weightkg / 200) * exerciseMin;
      }
     return Math.round(BMR);
