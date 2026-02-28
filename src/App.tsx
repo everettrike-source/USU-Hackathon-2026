@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { calculateBaseCalories, bulkCutCalories, type UserInformation, type ExtraInformation } from './utils/NutritionCalculator'
 import {type MealPlan, generateMealPlan, mealPlanToString} from './utils/MealPlanGenerator'
-import './App.css'
-
-
 
 function App() {
   const [feet, setFeet] = useState<string>("")
@@ -20,8 +17,8 @@ function App() {
   const [calorieResult, setCalorieResult] = useState<number>(0)
   const [restrictions, setRestrictions] = useState<string>("")
   const [meals, setMeals] = useState<string>("")
-  
-  const handleCalculate = () => 
+
+  const handleCalculate = () =>
   {
     const hFeet = Number(feet)
     const hInches = Number(inches)
@@ -35,7 +32,7 @@ function App() {
       setShow(0)
       return
     }
-    
+
     const user: UserInformation = {
       age: userAge,
       weight: w,
@@ -45,7 +42,7 @@ function App() {
       heightInches: hInches,
       activityIntensity: intense
     }
-    
+
     const bmrResult = calculateBaseCalories(user)
     setBMR(bmrResult)
     setShow(prev => prev+1)
@@ -70,7 +67,6 @@ function App() {
       heightInches: hInches,
       activityIntensity: intense
     }
-
 
     const extra: ExtraInformation = {
       targetMonth: monthsToTarget,
@@ -103,168 +99,176 @@ function App() {
     }
   }
 
-
   return (
     <>
       {show==0 &&
       <>
-        <div className = "banner">BMR Calculator</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Enter Height</h2>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">BMR Calculator</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Enter Height</h2>
             <input
               type="number"
               placeholder="feet"
               value={feet}
               onChange={(e) => setFeet(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             />
             <input
               type="number"
               placeholder="inches"
               value={inches}
               onChange={(e) => setInches(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             />
-            <button onClick = {() => setShow(prev => prev+1)}>Next</button>
+            <button onClick={() => setShow(prev => prev+1)} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Next</button>
           </div>
         </div>
       </>
       }
       {show==1 &&
       <>
-        <div className = "banner">BMR Calculator</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Enter Weight</h2>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">BMR Calculator</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Enter Weight</h2>
             <input
               type="number"
               placeholder="weight (lbs)"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             />
-            <button onClick = {() => setShow(prev => prev+1)}>Next</button>
+            <button onClick={() => setShow(prev => prev+1)} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Next</button>
           </div>
         </div>
       </>
       }
       {show==2 &&
       <>
-        <div className = "banner">BMR Calculator</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Enter Age</h2>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">BMR Calculator</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Enter Age</h2>
             <input
               type="number"
               placeholder="age (years)"
               value={age}
               onChange={(e) => setAge(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             />
-            <button onClick = {() => setShow(prev => prev+1)}>Next</button>
+            <button onClick={() => setShow(prev => prev+1)} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Next</button>
           </div>
         </div>
       </>
       }
       {show==3 &&
       <>
-        <div className = "banner">BMR Calculator</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Enter Gender</h2>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">BMR Calculator</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Enter Gender</h2>
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             >
               <option value="">Select Gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
-            <button onClick = {() => setShow(prev => prev+1)}>Next</button>
+            <button onClick={() => setShow(prev => prev+1)} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Next</button>
           </div>
         </div>
       </>
       }
       {show==4 &&
       <>
-        <div className = "banner">BMR Calculator</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Enter Your activity level</h2>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">BMR Calculator</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Enter Your activity level</h2>
             <input
               type="number"
               placeholder="number of hours active per week"
               value={activity}
               onChange={(e) => setActivity(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             />
             <input
               type="number"
               placeholder="intensity of activity from 2 - 10"
-              value = {intensity}
+              value={intensity}
               onChange={(e) => setIntensity(e.target.value)}
-              />
-            
-            <button onClick = {handleCalculate}>Calculate BMR</button>
+              className="w-full mb-4 p-3 rounded border-none"
+            />
+            <button onClick={handleCalculate} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Calculate BMR</button>
           </div>
         </div>
       </>
       }
       {show == 5 &&
       <>
-        <div className = "banner">Goal Weight Calories Calculator</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Your BMR is {BMR}</h2>
-            <h2>Please enter your goal weight and months to achieve it</h2>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">Goal Weight Calories Calculator</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Your BMR is {BMR}</h2>
+            <h2 className="mb-4 text-white text-lg font-semibold">Please enter your goal weight and months to achieve it</h2>
             <input
-              type = "number"
-              placeholder = "Goal Weight"
-              value = {target}
+              type="number"
+              placeholder="Goal Weight"
+              value={target}
               onChange={(e) => setTarget(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             />
             <input
-              type = "number"
-              placeholder = "Months to Reach goal"
-              value = {months}
+              type="number"
+              placeholder="Months to Reach goal"
+              value={months}
               onChange={(e) => setMonths(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             />
-            <button onClick={handleBulkCutCalculate}>Calculate Daily Calories</button>
+            <button onClick={handleBulkCutCalculate} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Calculate Daily Calories</button>
           </div>
         </div>
       </>
       }
       {show == 6 &&
       <>
-        <div className = "banner">Your Daily Calories</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Your daily calorie goal is: {calorieResult}</h2>
-            <button onClick = {() => setShow(prev => prev+1)}>Find meal plans</button>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">Your Daily Calories</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Your daily calorie goal is: {calorieResult}</h2>
+            <button onClick={() => setShow(prev => prev+1)} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Find meal plans</button>
           </div>
         </div>
       </>
       }
       {show == 7 &&
       <>
-        <div className = "banner">Meal Plan Generator</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Enter any allergies or dietary restrictions</h2>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">Meal Plan Generator</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Enter any allergies or dietary restrictions</h2>
             <input
               type="string"
               placeholder="Dietary Restrictions"
               value={restrictions}
               onChange={(e) => setRestrictions(e.target.value)}
+              className="w-full mb-4 p-3 rounded border-none"
             />
-            <button onClick = {handleMealPlans}>Generate</button>
+            <button onClick={handleMealPlans} className="w-full mb-4 p-3 rounded border-none bg-slate-600 text-white font-semibold cursor-pointer hover:bg-slate-700">Generate</button>
           </div>
         </div>
       </>
       }
       {show == 8 &&
       <>
-        <div className = "banner">Meal Plan Generator</div>
-        <div className = "content">
-          <div className = "input-box">
-            <h2>Here is your meal plan</h2>
-            <h2>{meals}</h2>
+        <div className="w-full bg-[#8a1e25] text-white py-5 text-center text-2xl font-bold">Meal Plan Generator</div>
+        <div className="flex justify-center p-4">
+          <div className="max-w-sm w-full p-8 bg-[#2f2f2f] rounded-xl flex flex-col gap-4">
+            <h2 className="mb-4 text-white text-lg font-semibold">Here is your meal plan</h2>
+            <h2 className="text-white text-sm whitespace-pre-wrap">{meals}</h2>
           </div>
         </div>
       </>
