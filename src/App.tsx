@@ -89,14 +89,11 @@ function App() {
     const userAge = Number(age)
     const intense = Number(intensity)
 
-    const fields = [hFeet, hInches, w, act, userAge, intense];
-    const isAnyFieldEmpty = fields.some(field => isNaN(field) || field === null);
-
-  if (isAnyFieldEmpty || !gender) {
-    alert("Please fill out all fields correctly");
-    setShow(0);
-    return;
-}
+    if (!hFeet || !hInches || !w || !gender || !act || !userAge || !intense) {
+      alert("Please fill out all fields correctly")
+      setShow(1)
+      return
+    }
 
     const user: UserInformation = {
       age: userAge,
@@ -278,6 +275,36 @@ function App() {
   return (
     <>
       {show === 0 && (
+        <>
+          <div className="bg-black min-h-screen flex flex-col items-center">
+            <div className="bg-red-600 text-white h-32 w-full flex items-center justify-center text-4xl font-bold rounded-b-3xl shadow-lg">
+              Meal Planner
+            </div>
+            <div className="flex flex-col md:flex-row items-center justify-between px-10 py-12 w-full max-w-6xl">
+              <div className="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
+                <p className="text-lg text-white mb-6">
+                  Calculate your BMR, set weight goals, and generate custom
+                  meal plans tailored specifically to you.
+                </p>
+                <button 
+                  className="bg-red-600 text-white px-6 py-3 rounded-lg"
+                  onClick={() => setShow(prev => prev + 1)}
+                >
+                  Get Started
+                </button>
+              </div>
+              <div className="md:w-1/2 flex justify-center">
+                <img
+                  src="/Healthy-Food.jpg"
+                  alt="Fitness"
+                  className="max-w-md w-full rounded-xl shadow-lg"
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {show === 1 && (
         <PageTemplate title="BMR Calculator" subtitle="Enter your height!">
           <div className="space-y-5">
             <InputField label="Feet" type="number" placeholder="e.g. 5" value={feet} onChange={(e) => setFeet(e.target.value)} unit="ft" />
@@ -287,7 +314,7 @@ function App() {
         </PageTemplate>
       )}
 
-      {show === 1 && (
+      {show === 2 && (
         <PageTemplate title="BMR Calculator" subtitle="Enter your weight!">
           <div className="space-y-5">
             <InputField label="Weight" type="number" placeholder="e.g. 180" value={weight} onChange={(e) => setWeight(e.target.value)} unit="lbs" />
@@ -296,7 +323,7 @@ function App() {
         </PageTemplate>
       )}
 
-      {show === 2 && (
+      {show === 3 && (
         <PageTemplate title="BMR Calculator" subtitle="Enter your age!">
           <div className="space-y-5">
             <InputField label="Age" type="number" placeholder="e.g. 25" value={age} onChange={(e) => setAge(e.target.value)} unit="yrs" />
@@ -305,7 +332,7 @@ function App() {
         </PageTemplate>
       )}
 
-      {show === 3 && (
+      {show === 4 && (
         <PageTemplate title="BMR Calculator" subtitle="Select your gender!">
           <div className="space-y-5">
             <SelectField 
@@ -323,7 +350,7 @@ function App() {
         </PageTemplate>
       )}
 
-      {show === 4 && (
+      {show === 5 && (
         <PageTemplate title="BMR Calculator" subtitle="Enter your activity level!">
           <div className="space-y-5">
             <InputField label="Activity Level" type="number" placeholder="e.g. 14" value={activity} onChange={(e) => setActivity(e.target.value)} unit="hrs/wk" />
@@ -333,7 +360,7 @@ function App() {
         </PageTemplate>
       )}
 
-      {show === 5 && (
+      {show === 6 && (
         <PageTemplate title="BMR Calculator" subtitle="Set your goal!">
           <div className="space-y-5">
             <div className="bg-zinc-800 p-4 rounded-xl text-center">
@@ -347,7 +374,7 @@ function App() {
         </PageTemplate>
       )}
 
-      {show === 6 && (
+      {show === 7 && (
         <PageTemplate title="Your Calorie Goal" subtitle="Ready for meal planning?">
           <div className="space-y-5">
             <div className="bg-red-900/30 p-6 rounded-xl text-center border border-red-800">
@@ -360,11 +387,8 @@ function App() {
         </PageTemplate>
       )}
 
-        {show === 7 && (
-        <PageTemplate 
-          title="Meal Plan Generator" 
-          subtitle="Tell us your dietary needs!"
-        >
+      {show === 8 && (
+        <PageTemplate title="Meal Plan Generator" subtitle="Tell us your dietary needs!">
           <div className="space-y-5">
             <InputField 
               label="Restrictions" 
@@ -398,7 +422,7 @@ function App() {
   </div>
 )}
 
-      {show === 8 && (
+      {show === 9 && (
         <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
           <div className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
             <div className="mt-6 mx-6 flex-col text-center max-w-full items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
