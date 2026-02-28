@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { calculateBaseCalories, bulkCutCalories, type UserInformation, type ExtraInformation } from './utils/NutritionCalculator'
-import {type MealPlan, generateMealPlan} from './utils/MealPlanGenerator'
+import {type MealPlan, generateMealPlan, mealPlanToString} from './utils/MealPlanGenerator'
 import './App.css'
 
 
@@ -19,7 +19,7 @@ function App() {
   const [intensity, setIntensity] = useState<string>("")
   const [calorieResult, setCalorieResult] = useState<number>(0)
   const [restrictions, setRestrictions] = useState<string>("")
-  const [meals, setMeals] = useState<MealPlan>()
+  const [meals, setMeals] = useState<string>("")
   
   const handleCalculate = () => 
   {
@@ -48,7 +48,7 @@ function App() {
     
     const bmrResult = calculateBaseCalories(user)
     setBMR(bmrResult)
-    setShow(show + 1)
+    setShow(prev => prev+1)
   }
 
   const handleBulkCutCalculate = () => {
@@ -83,16 +83,26 @@ function App() {
     }
 
     const result = bulkCutCalories(user, extra)
-    setShow(show + 1)
+    setShow(prev => prev+1)
     setCalorieResult(result)
   }
 
-  const handleMealPlans = () => {
-  generateMealPlan(calorieResult, restrictions).then((m) => {
-    setMeals(m)
-    setShow(show + 1)
-  })
-}
+  const handleMealPlans = async () => {
+    try
+    {
+      const plan = await generateMealPlan(calorieResult, restrictions)
+
+      const planString = mealPlanToString(plan)
+
+      setMeals(planString)
+      setShow(prev => prev+1)
+    }
+    catch
+    {
+      alert("Error Generating Plan")
+    }
+  }
+
 
   return (
     <>
@@ -114,7 +124,7 @@ function App() {
               value={inches}
               onChange={(e) => setInches(e.target.value)}
             />
-            <button onClick = {() => setShow(show + 1)}>Next</button>
+            <button onClick = {() => setShow(prev => prev+1)}>Next</button>
           </div>
         </div>
       </>
@@ -131,7 +141,7 @@ function App() {
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
             />
-            <button onClick = {() => setShow(show + 1)}>Next</button>
+            <button onClick = {() => setShow(prev => prev+1)}>Next</button>
           </div>
         </div>
       </>
@@ -148,7 +158,7 @@ function App() {
               value={age}
               onChange={(e) => setAge(e.target.value)}
             />
-            <button onClick = {() => setShow(show + 1)}>Next</button>
+            <button onClick = {() => setShow(prev => prev+1)}>Next</button>
           </div>
         </div>
       </>
@@ -167,7 +177,7 @@ function App() {
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
-            <button onClick = {() => setShow(show + 1)}>Next</button>
+            <button onClick = {() => setShow(prev => prev+1)}>Next</button>
           </div>
         </div>
       </>
@@ -226,7 +236,7 @@ function App() {
         <div className = "content">
           <div className = "input-box">
             <h2>Your daily calorie goal is: {calorieResult}</h2>
-            <button onClick = {() => setShow(show + 1)}>Find meal plans</button>
+            <button onClick = {() => setShow(prev => prev+1)}>Find meal plans</button>
           </div>
         </div>
       </>
@@ -238,7 +248,7 @@ function App() {
           <div className = "input-box">
             <h2>Enter any allergies or dietary restrictions</h2>
             <input
-              type="number"
+              type="string"
               placeholder="Dietary Restrictions"
               value={restrictions}
               onChange={(e) => setRestrictions(e.target.value)}
@@ -254,6 +264,7 @@ function App() {
         <div className = "content">
           <div className = "input-box">
             <h2>Here is your meal plan</h2>
+            <h2>{meals}</h2>
           </div>
         </div>
       </>
@@ -261,5 +272,4 @@ function App() {
     </>
   )
 }
-
 export default App
