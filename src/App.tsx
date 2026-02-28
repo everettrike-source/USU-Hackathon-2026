@@ -102,14 +102,13 @@ function App() {
   return (
     <>
       {show === 0 && (
-        <div className="flex flex-col items-center justify-center min-h-[70vh] p-4 animate-in fade-in zoom-in-95 duration-300">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4 animate-in fade-in zoom-in-95 duration-300">
           
           {/* The Main Card Container */}
           <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden">
             
             {/* Sleek Gradient Header */}
-            <div className="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-              <img className="size-12 shrink-0" src="/vite.svg" alt="ChitChat Logo" />
+            <div className="mt-6 mx-6 flex-col text-center max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-red-800/40 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
             <div>
             <div className="text-xl font-medium text-black dark:text-white">BMR Calculator</div>
               <p className="text-gray-500 dark:text-gray-400">Enter your height!</p>
