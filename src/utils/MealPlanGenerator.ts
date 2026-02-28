@@ -69,3 +69,50 @@ Respond ONLY with valid JSON in this exact format, no markdown or extra text:
   const text = data.candidates[0].content.parts[0].text;
   return JSON.parse(text) as MealPlan;
 }
+
+export function recipeToString(recipe: Recipe): string {
+  const ingredientList = recipe.ingredients.map((ing) => `  • ${ing}`).join("\n");
+  const instructionList = recipe.instructions
+    .map((step, i) => `  ${i + 1}. ${step}`)
+    .join("\n");
+
+  return `${recipe.name}
+  ${"=".repeat(recipe.name.length)}
+
+Nutrition (per serving):
+  • Calories: ${recipe.calories}
+  • Protein: ${recipe.protein}g
+  • Carbs: ${recipe.carbs}g
+  • Fat: ${recipe.fat}g
+
+Ingredients:
+${ingredientList}
+
+Instructions:
+${instructionList}
+  `.trim();
+}
+
+export function mealPlanToString(plan: MealPlan): string {
+  return `
+Daily Meal Plan - Total Calories: ${plan.totalCalories}
+${"=".repeat(50)}
+
+BREAKFAST
+${"-".repeat(50)}
+${recipeToString(plan.breakfast)}
+
+LUNCH
+${"-".repeat(50)}
+${recipeToString(plan.lunch)}
+
+DINNER
+${"-".repeat(50)}
+${recipeToString(plan.dinner)}
+
+SNACK
+${"-".repeat(50)}
+${recipeToString(plan.snack)}
+  `.trim();
+}
+
