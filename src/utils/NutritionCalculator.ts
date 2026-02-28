@@ -12,6 +12,7 @@ export type UserInformation = {
 export type ExtraInformation = {
     targetWeight: number;
     targetMonth: number;
+    bmr: number;
 }
 
 
@@ -36,12 +37,9 @@ export function calculateBaseCalories(user: UserInformation): number {
 }
 //if under or over max or min alert them saying by that date that this is max/min weight healthly possible to reach.
 export function bulkCutCalories(user: UserInformation, extra: ExtraInformation): number {
-    const baseCalories = bmr;
     const weightDifference = extra.targetWeight - user.weight;
     const daysToTarget = 30.5 * extra.targetMonth;  
     const totalCalorieShift = weightDifference * 3500;
-    const dailyCalorieShift = totalCalorieShift / daysToTarget;
-
-   
-    return Math.round(baseCalories + surplus);
+    const finalTarget = extra.bmr + (totalCalorieShift/daysToTarget);
+    return Math.round(Math.max(1200, Math.min(finalTarget, 5000)));
 }
