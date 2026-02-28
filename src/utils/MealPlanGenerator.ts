@@ -1,5 +1,5 @@
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 export type Recipe = {
   name: string;
@@ -62,7 +62,14 @@ Respond ONLY with valid JSON in this exact format, no markdown or extra text:
   });
 
   if (!response.ok) {
-    throw new Error(`Gemini API error: ${response.status} ${response.statusText}`);
+    // 1. Wait for Google's exact error message to download
+    const errorData = await response.json(); 
+    
+    // 2. Dig into the object to find the specific message
+    const exactReason = errorData?.error?.message || response.statusText;
+    
+    // 3. Throw the error with the detailed reason attached
+    throw new Error(`Gemini Error ${response.status}: ${exactReason}`);
   }
 
   const data = await response.json();

@@ -97,9 +97,9 @@ function App() {
       setMeals(planString)
       setShow(prev => prev+1)
     }
-    catch
-    {
-      alert("Error Generating Plan")
+    catch (error: any) {
+    // Using \n adds a line break in the alert box to make it readable
+    alert(`Error Generating Plan:\n\n${error.message}`);
     }
   }
 
