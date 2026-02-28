@@ -13,8 +13,6 @@ export type ExtraInformation = {
     targetMonth: number;
 }
 
-
-
 export function calculateBaseCalories(user: UserInformation): number {
     const weightkg = user.weight / 2.20462; 
     const heightCm = (user.heightFoot * 12 + user.heightInches) * 2.54;
@@ -49,8 +47,3 @@ export function bulkCutCalories(user: UserInformation, extra: ExtraInformation):
     }
     return Math.round(Math.max(1200, Math.min(finalTarget, 5000)));
 }
-const Everett: UserInformation = {age:18,weight: 160, gender:'male',activityLevel: 5,activityIntensity: 8,heightFoot:6,heightInches:1};
-const EverettExtra: ExtraInformation = {targetWeight: 200, targetMonth: 12};
-const myBulkCutCalories = bulkCutCalories(Everett, EverettExtra);
-console.log(calculateBaseCalories(Everett));
-console.log(myBulkCutCalories);
