@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { calculateBaseCalories, bulkCutCalories, type UserInformation } from './utils/NutritionCalculator'
+import { calculateBaseCalories, bulkCutCalories, type UserInformation, type ExtraInformation } from './utils/NutritionCalculator'
 
 import './App.css'
 
@@ -16,6 +16,7 @@ function App() {
   const [months, setMonths] = useState<string>("")
   const [BMR, setBMR] = useState<number>(0)
   const [age, setAge] = useState<string>("")
+  const [intensity, setIntensity] = useState<string>("")
   const [calorieResult, setCalorieResult] = useState<number>(0)
   
   const handleCalculate = () => 
@@ -25,8 +26,9 @@ function App() {
     const w = Number(weight)
     const act = Number(activity)
     const userAge = Number(age)
+    const intense = Number(intensity)
 
-    if (!hFeet || !hInches || !w || !gender || !act || !userAge) {
+    if (!hFeet || !hInches || !w || !gender || !act || !userAge || !intense) {
       alert("Please fill out all fields correctly")
       setShow(0)
       return
@@ -38,7 +40,8 @@ function App() {
       gender: gender as 'male' | 'female',
       activityLevel: act,
       heightFoot: hFeet,
-      heightInches: hInches
+      heightInches: hInches,
+      activityIntensity: intense
     }
     
     const bmrResult = calculateBaseCalories(user)
@@ -47,18 +50,14 @@ function App() {
   }
 
   const handleBulkCutCalculate = () => {
+    const goalWeight = Number(target)
+    const monthsToTarget = Number(months)
     const hFeet = Number(feet)
     const hInches = Number(inches)
     const w = Number(weight)
     const act = Number(activity)
     const userAge = Number(age)
-    const goalWeight = Number(target)
-    const monthsToTarget = Number(months)
-
-    if (!goalWeight || !monthsToTarget) {
-      alert("Please fill out all fields")
-      return
-    }
+    const intense = Number(intensity)
 
     const user: UserInformation = {
       age: userAge,
@@ -67,12 +66,21 @@ function App() {
       activityLevel: act,
       heightFoot: hFeet,
       heightInches: hInches,
-      targetWeight: goalWeight,
-      targetDate: monthsToTarget * 30.5,
-      bmr: BMR
+      activityIntensity: intense
     }
 
-    const result = bulkCutCalories(user)
+
+    const extra: ExtraInformation = {
+      targetMonth: monthsToTarget,
+      targetWeight: goalWeight
+    }
+
+    if (!goalWeight || !monthsToTarget) {
+      alert("Please fill out all fields")
+      return
+    }
+
+    const result = bulkCutCalories(user, extra)
     setCalorieResult(result)
   }
 
@@ -166,6 +174,13 @@ function App() {
               value={activity}
               onChange={(e) => setActivity(e.target.value)}
             />
+            <input
+              type="number"
+              placeholder="intensity of activity from 2 - 10"
+              value = {intensity}
+              onChange={(e) => setIntensity(e.target.value)}
+              />
+            
             <button onClick = {handleCalculate}>Calculate BMR</button>
           </div>
         </div>
