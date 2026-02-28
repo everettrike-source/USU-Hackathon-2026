@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { calculateBaseCalories, bulkCutCalories, type UserInformation, type ExtraInformation } from './utils/NutritionCalculator'
-
+import {type MealPlan, generateMealPlan} from './utils/MealPlanGenerator'
 import './App.css'
 
 
@@ -18,6 +18,8 @@ function App() {
   const [age, setAge] = useState<string>("")
   const [intensity, setIntensity] = useState<string>("")
   const [calorieResult, setCalorieResult] = useState<number>(0)
+  const [restrictions, setRestrictions] = useState<string>("")
+  const [meals, setMeals] = useState<MealPlan>()
   
   const handleCalculate = () => 
   {
@@ -84,6 +86,13 @@ function App() {
     setShow(show + 1)
     setCalorieResult(result)
   }
+
+  const handleMealPlans = () => {
+  generateMealPlan(calorieResult, restrictions).then((m) => {
+    setMeals(m)
+    setShow(show + 1)
+  })
+}
 
   return (
     <>
@@ -217,6 +226,34 @@ function App() {
         <div className = "content">
           <div className = "input-box">
             <h2>Your daily calorie goal is: {calorieResult}</h2>
+            <button onClick = {() => setShow(show + 1)}>Find meal plans</button>
+          </div>
+        </div>
+      </>
+      }
+      {show == 7 &&
+      <>
+        <div className = "banner">Meal Plan Generator</div>
+        <div className = "content">
+          <div className = "input-box">
+            <h2>Enter any allergies or dietary restrictions</h2>
+            <input
+              type="number"
+              placeholder="Dietary Restrictions"
+              value={restrictions}
+              onChange={(e) => setRestrictions(e.target.value)}
+            />
+            <button onClick = {handleMealPlans}>Generate</button>
+          </div>
+        </div>
+      </>
+      }
+      {show == 8 &&
+      <>
+        <div className = "banner">Meal Plan Generator</div>
+        <div className = "content">
+          <div className = "input-box">
+            <h2>Here is your meal plan</h2>
           </div>
         </div>
       </>
