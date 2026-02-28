@@ -73,6 +73,7 @@ function App() {
   const [calorieResult, setCalorieResult] = useState<number>(0)
   const [restrictions, setRestrictions] = useState<string>("")
   const [meals, setMeals] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [currentMealPlan, setCurrentMealPlan] = useState<MealPlan | null>(null)
   const [shoppingManager] = useState(() => new ShoppingListManager())
   const [groceryResults, setGroceryResults] = useState<GrocerySearchResult | null>(null)
@@ -88,11 +89,14 @@ function App() {
     const userAge = Number(age)
     const intense = Number(intensity)
 
-    if (!hFeet || !hInches || !w || !gender || !act || !userAge || !intense) {
-      alert("Please fill out all fields correctly")
-      setShow(0)
-      return
-    }
+    const fields = [hFeet, hInches, w, act, userAge, intense];
+    const isAnyFieldEmpty = fields.some(field => isNaN(field) || field === null);
+
+  if (isAnyFieldEmpty || !gender) {
+    alert("Please fill out all fields correctly");
+    setShow(0);
+    return;
+}
 
     const user: UserInformation = {
       age: userAge,
@@ -145,6 +149,8 @@ function App() {
   }
 
   const handleMealPlans = async () => {
+    setShow(99);
+    setIsLoading(true);
     try
     {
       const plan = await generateMealPlan(calorieResult, restrictions)
@@ -153,11 +159,66 @@ function App() {
 
       setMeals(planString)
       setCurrentMealPlan(plan)
-      setShow(prev => prev+1)
+      setShow(8);
     }
     catch (error: any) {
     // Using \n adds a line break in the alert box to make it readable
     alert(`Error Generating Plan:\n\n${error.message}`);
+    setShow(7);
+    }
+    finally {
+    setIsLoading(false); // Turn loading OFF
+  }
+  }
+
+  const handleAcceptMeal = async () => {
+    if (currentMealPlan) {
+      shoppingManager.addDayToPlan(currentMealPlan)
+    }
+    await generateNewMealPlan()
+  }
+
+  const handleDeclineMeal = async () => {
+    await generateNewMealPlan()
+  }
+
+  const generateNewMealPlan = async () => {
+    try {
+      const plan = await generateMealPlan(calorieResult, restrictions)
+      const planString = mealPlanToString(plan)
+      setMeals(planString)
+      setCurrentMealPlan(plan)
+    } catch (error: any) {
+      alert(`Error Generating Plan:\n\n${error.message}`)
+    }
+  }
+
+  const handleGenerateShoppingList = async () => {
+    if (!userLocation.trim()) {
+      alert("Please enter your location")
+      return
+    }
+
+    try {
+      setIsLoadingGroceries(true)
+      const ingredients = shoppingManager.generateFinalShoppingList()
+      
+      // Parse ingredients string to Ingredient array
+      const parsedIngredients = ingredients.map(ing => {
+        const parts = ing.split(' ')
+        const quantity = parseInt(parts[0].replace('x', '')) || 1
+        const unit = parts[1] || 'item'
+        const name = parts.slice(parts[0].match(/\d/) ? 2 : 1).join(' ')
+        return { name, quantity, unit }
+      })
+
+      const result = await findGroceryStores(userLocation, parsedIngredients)
+      setGroceryResults(result)
+      setShow(10)
+    } catch (error: any) {
+      alert(`Error generating shopping list:\n\n${error.message}`)
+    } finally {
+      setIsLoadingGroceries(false)
     }
   }
 
@@ -299,14 +360,43 @@ function App() {
         </PageTemplate>
       )}
 
-      {show === 7 && (
-        <PageTemplate title="Meal Plan Generator" subtitle="Tell us your dietary needs!">
+        {show === 7 && (
+        <PageTemplate 
+          title="Meal Plan Generator" 
+          subtitle="Tell us your dietary needs!"
+        >
           <div className="space-y-5">
-            <InputField label="Restrictions" type="text" placeholder="e.g. Gluten-free, Vegan" value={restrictions} onChange={(e) => setRestrictions(e.target.value)} />
+            <InputField 
+              label="Restrictions" 
+              type="text" 
+              placeholder="e.g. Gluten-free, Vegan" 
+              value={restrictions} 
+              onChange={(e) => setRestrictions(e.target.value)} 
+            />
+            
+            <p className="text-zinc-500 text-xs px-1">
+              Tip: You can include multiple restrictions or specific foods you dislike.
+            </p>
           </div>
-          <ActionButton onClick={handleMealPlans}>Generate</ActionButton>
+
+          <ActionButton onClick={handleMealPlans}>
+            Generate
+          </ActionButton>
         </PageTemplate>
       )}
+      {show === 99 && (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
+    <div className="flex flex-col items-center space-y-6">
+      {/* THE SPINNER */}
+      <div className="w-16 h-16 border-4 border-zinc-800 border-t-red-600 rounded-full animate-spin"></div>
+      
+      <div className="text-center">
+        <h2 className="text-white text-2xl font-bold tracking-tight">Generating Recipes</h2>
+        <p className="text-zinc-500 mt-2">Consulting with the AI chef...</p>
+      </div>
+    </div>
+  </div>
+)}
 
       {show === 8 && (
         <div className="flex flex-col items-center justify-center min-h-screen bg-stone-950 p-4">
